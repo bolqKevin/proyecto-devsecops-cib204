@@ -1,0 +1,40 @@
+EVIDENCIAS CLOUD - CIB-204 ENTREGABLE 1
+Fecha: 2026-10-12
+
+Repositorio y pipeline
+- Repositorio: https://github.com/bolqKevin/proyecto-devsecops-cib204
+- Actions: https://github.com/bolqKevin/proyecto-devsecops-cib204/actions/runs/38329049545
+- Resultado inicial esperado de Fase 1: Failure.
+- Jobs correctos: SAST - CodeQL, DAST - OWASP ZAP.
+- Jobs con hallazgos deliberados: SAST - Semgrep, Secretos - Gitleaks, SCA - Dependencias, Imagen - Trivy + SBOM.
+- Artefactos generados por la ejecución: reporte-gitleaks, reporte-semgrep, reporte-zap, sbom y SPDX.
+
+Entorno Codespace
+- node --version: v24.21.0
+- npm --version: 11.19.0
+- docker --version: Docker version 29.8.0-1
+- docker compose version: Docker Compose version v5.5.1
+- Captura oficial de la salida de la terminal: 09-versiones-entorno.png.
+- Diferencia de entorno: .devcontainer/devcontainer.json declara Node 20, pero
+  la sesión Codespace observada devolvió Node v24.21.0; se conserva la salida real.
+
+Pruebas
+- npm test -- --runInBand: 2 suites passed, 6 tests passed.
+- node servidor/prueba.js: descifrado coincide = true.
+- docker compose ps: contenedores cifrado y keycloak Up.
+- curl http://localhost:3000/salud: {"estado":"ok","version":"inseguro-1.0"}.
+
+Keycloak (API administrativa local del Codespace)
+- realm appmovil: creado, HTTP 201.
+- cliente servicio-cifrado: creado, HTTP 201.
+- usuario demo: creado, HTTP 201.
+- AUTH_ENABLED se conserva en false para respetar el baseline de Fase 1.
+
+App móvil
+- Expo web levantado en el puerto 8081.
+- URL configurada en la app: https://shiny-space-umbrella-xjqj9q75g6w2p4q4-3000.app.github.dev
+- Operación cifrar: Estado: Cifrado OK.
+- Operación descifrar: Estado: Descifrado OK.
+- Texto recuperado: Hola mundo seguro CIB-204.
+
+La remediación de las vulnerabilidades del baseline corresponde a la Fase 2.

@@ -1,0 +1,34 @@
+# ============================================================================
+#  docker-compose.yml  -  Starts the encryption service and Keycloak (IAM)
+#  CIB-204 Software Security - Universidad Cenfotec
+# ============================================================================
+services:
+  cifrado:
+    build: ./servidor
+    container_name: cifrado
+    ports:
+      - "3000:3000"
+    environment:
+      # The baseline keeps access control disabled.
+      - AUTH_ENABLED=${AUTH_ENABLED:-false}
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=appmovil
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: keycloak
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      # Codespaces provides the service name and forwarding domain.
+      - KC_HOSTNAME_URL=https://${CODESPACE_NAME}-8080.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
+      - KC_HOSTNAME_ADMIN_URL=https://${CODESPACE_NAME}-8080.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_ENABLED=true
+      # The github.dev proxy terminates TLS and forwards the original scheme.
+      - KC_PROXY_HEADERS=xforwarded
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

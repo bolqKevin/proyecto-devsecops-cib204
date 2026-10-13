@@ -1,0 +1,5 @@
+# Dependencies
+node_modules/
+
+# The baseline keeps these files so secret scanning can register them;
+# the hardened configuration should ignore them.
