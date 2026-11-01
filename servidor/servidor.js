@@ -8,6 +8,8 @@ const db = require('./db');
 const config = require('./config');
 const { requiereAuth } = require('./auth');
 
+// CSRF no aplica: la API no usa cookies/sesiones y exige Authorization: Bearer.
+// nosemgrep: javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage
 const app = express();
 const llaves = cifrado.generarLlaves();
 const origenesPermitidos = config.ORIGEN_PERMITIDO

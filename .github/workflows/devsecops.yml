@@ -20,15 +20,15 @@ jobs:
     name: SAST - Semgrep
     runs-on: ubuntu-latest
     container:
-      image: semgrep/semgrep
+      image: semgrep/semgrep:1.146.0
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Ejecutar Semgrep
         # --error hace fallar el job si hay hallazgos; se guarda el SARIF.
         run: semgrep scan --config p/default --config p/javascript --config p/nodejs --error --sarif --output semgrep.sarif .
       - name: Guardar reporte Semgrep
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: reporte-semgrep
           path: semgrep.sarif
@@ -44,14 +44,14 @@ jobs:
       actions: read
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Inicializar CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@f35333b910470a5408cb081b68f0701254a7d27b # v3.28.18
         with:
           languages: javascript
           queries: security-extended
       - name: Analizar con CodeQL
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@f35333b910470a5408cb081b68f0701254a7d27b # v3.28.18
 
   # ==========================================================================
   # 3) Deteccion de secretos con Gitleaks  ->  .env, llave privada, claves AWS
@@ -60,7 +60,7 @@ jobs:
     name: Secretos - Gitleaks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
       - name: Ejecutar Gitleaks
@@ -70,7 +70,7 @@ jobs:
             --report-format sarif --report-path /repo/gitleaks.sarif
       - name: Guardar reporte Gitleaks
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: reporte-gitleaks
           path: gitleaks.sarif
@@ -82,8 +82,8 @@ jobs:
     name: SCA - Dependencias
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
       - name: Instalar dependencias reproducibles
@@ -98,7 +98,7 @@ jobs:
           AUTH_ENABLED: 'false'
         run: npm test -- --runInBand
       - name: Trivy - dependencias (fs)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@8f28faec26515256b6d22074d1d2a8986f4cbd87 # master, pinned
         with:
           scan-type: fs
           scan-ref: servidor
@@ -113,11 +113,11 @@ jobs:
     name: Imagen - Trivy + SBOM
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Construir la imagen
         run: docker build -t cifrado:${{ github.sha }} ./servidor
       - name: Trivy - escaneo de imagen
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@8f28faec26515256b6d22074d1d2a8986f4cbd87 # master, pinned
         with:
           scan-type: image
           image-ref: cifrado:${{ github.sha }}
@@ -126,13 +126,13 @@ jobs:
           format: table
       - name: Generar SBOM (Syft)
         if: always()
-        uses: anchore/sbom-action@v0
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0
         with:
           image: cifrado:${{ github.sha }}
           output-file: sbom.spdx.json
       - name: Guardar SBOM
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: sbom
           path: sbom.spdx.json
@@ -144,7 +144,7 @@ jobs:
     name: DAST - OWASP ZAP
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Levantar el servicio
         run: |
           docker build -t cifrado ./servidor
@@ -159,7 +159,7 @@ jobs:
             zap-baseline.py -t http://localhost:3000 -r informe_zap.html -a -I || true
       - name: Guardar informe ZAP
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
         with:
           name: reporte-zap
           path: zap/informe_zap.html

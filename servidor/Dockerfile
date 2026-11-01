@@ -1,14 +1,21 @@
-FROM node:20-slim AS build
+FROM node:20.20.2-bookworm-slim AS build
+
+RUN apt-get update \
+  && apt-get dist-upgrade -y --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY *.js ./
 
-FROM node:20-slim
+FROM node:20.20.2-bookworm-slim
 
 WORKDIR /app
-RUN useradd --system --no-create-home --shell /usr/sbin/nologin appuser
+RUN apt-get update \
+  && apt-get dist-upgrade -y --no-install-recommends \
+  && useradd --system --no-create-home --shell /usr/sbin/nologin appuser \
+  && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app /app
 RUN chown -R appuser:appuser /app
 USER appuser

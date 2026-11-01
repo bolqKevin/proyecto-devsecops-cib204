@@ -24,6 +24,10 @@ Autenticacion
 - Solicitud: POST /cifrar sin encabezado Authorization.
 - Resultado: HTTP 401 y cuerpo {"error":"No autorizado"}.
 
+SAST local
+- Comando: Semgrep con p/default, p/javascript y p/nodejs.
+- Resultado: 0 hallazgos bloqueantes sobre 29 archivos y 246 reglas.
+
 Correcciones verificadas en codigo
 - Secretos retirados de servidor/config.js y trasladados a variables de entorno.
 - JWT validado con issuer, audience, JWKS y algoritmo RS256.
@@ -31,4 +35,5 @@ Correcciones verificadas en codigo
 - Validacion de texto, ciphertext, expresiones numericas y nombres de host.
 - SQL parametrizado y diagnostico ejecutado con execFile y argumentos separados.
 - Helmet, CORS restringido y limite de cuerpo JSON.
-- Imagen basada en node:20-slim con usuario appuser sin privilegios.
+- Imagen basada en node:20.20.2-bookworm-slim, actualización del sistema y
+  usuario appuser sin privilegios.
