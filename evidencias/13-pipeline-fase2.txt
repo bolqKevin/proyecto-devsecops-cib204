@@ -1,0 +1,30 @@
+EVIDENCIA DE PIPELINE - FASE 2
+Proyecto: Proyecto DevSecOps CIB-204
+Fecha: 2026-11-01
+
+Run: https://github.com/bolqKevin/proyecto-devsecops-cib204/actions/runs/41334722385
+Commit: c8bc7fb - Allow unfixable image advisories in Trivy
+Estado general: Success
+Duracion: 1m 27s
+Artefactos generados: 5
+
+Jobs aprobados
+- SAST - Semgrep: Success, 33 s.
+- SAST - CodeQL: Success, 57 s.
+- Secretos - Gitleaks: Success, 7 s.
+- SCA - Dependencias: Success, 25 s.
+- Imagen - Trivy + SBOM: Success, 53 s.
+- DAST - OWASP ZAP: Success, 1m 23 s.
+
+Artefactos de seguridad observados
+- reporte-semgrep
+- reporte-gitleaks
+- sbom
+- reporte-zap
+- imagen SPDX de cifrado
+
+Configuracion relevante
+Trivy mantiene severidad HIGH,CRITICAL y falla ante vulnerabilidades con
+version corregida disponible. `ignore-unfixed: true` evita bloquear por avisos
+del sistema base que no tienen parche upstream, y queda documentado en la
+seccion de imagen de la remediacion.

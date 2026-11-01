@@ -25,10 +25,12 @@ imagen Docker y el pipeline de GitHub Actions.
   sintaxis, Semgrep local y rechazo de solicitudes sin JWT.
 - `evidencias/01-prueba-cifrado.txt` y `evidencias/02-pipeline-actions.png`:
   registros del primer avance para el comparativo antes/despues.
-- `evidencias/13-pipeline-fase2.png`: ejecucion final de Actions en verde.
+- `evidencias/13-pipeline-fase2.txt`: ejecucion final de Actions en verde;
+  la vista visual verificable queda publicada en el run enlazado.
 - `evidencias/14-pentest-fase2.txt`: pruebas manuales de acceso sin token,
   entrada invalida e intento de inyeccion.
-- `evidencias/15-app-fase2-auth.png`: operacion de la app con token valido.
+- `evidencias/15-app-fase2-auth.png`: operacion de la app con token valido,
+  pendiente de ejecutar con la sesion demo de Keycloak.
 
 ## Criterio de cierre
 
