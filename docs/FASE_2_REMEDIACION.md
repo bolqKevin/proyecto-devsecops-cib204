@@ -14,7 +14,7 @@ imagen Docker y el pipeline de GitHub Actions.
 | Dependencias | Versiones actuales de Express, Helmet, express-jwt, jwks-rsa y mysql2 | `npm audit --audit-level=high` |
 | SAST | Parser aritmetico seguro, SQL parametrizado y `execFile` con argumentos fijos | Semgrep y CodeQL |
 | Autenticacion | JWKS de Keycloak, issuer, audience y algoritmo RS256 | 401 sin token y 200 con token valido |
-| Imagen | `node:20.20.2-bookworm-slim`, actualizacion del sistema, `npm ci --omit=dev` y usuario `appuser` | Trivy y ejecucion sin root |
+| Imagen | `node:20.20.2-bookworm-slim`, actualizacion del sistema, runtime sin npm/corepack, `npm ci --omit=dev` y usuario `appuser` | Trivy HIGH/CRITICAL corregibles y ejecucion sin root |
 | DAST | Helmet, CORS por lista permitida y limite de cuerpo | OWASP ZAP |
 | Cifrado | RSA-2048 con OAEP-SHA256 y validacion de entradas | Pruebas unitarias e integracion |
 | Rama principal | Reglas de proteccion y checks obligatorios | Configuracion de GitHub |

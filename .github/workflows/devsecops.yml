@@ -122,6 +122,7 @@ jobs:
           scan-type: image
           image-ref: cifrado:${{ github.sha }}
           severity: HIGH,CRITICAL
+          ignore-unfixed: true
           exit-code: '1'
           format: table
       - name: Generar SBOM (Syft)

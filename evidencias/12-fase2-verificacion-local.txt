@@ -36,4 +36,6 @@ Correcciones verificadas en codigo
 - SQL parametrizado y diagnostico ejecutado con execFile y argumentos separados.
 - Helmet, CORS restringido y limite de cuerpo JSON.
 - Imagen basada en node:20.20.2-bookworm-slim, actualización del sistema y
-  usuario appuser sin privilegios.
+  runtime sin npm/corepack y usuario appuser sin privilegios. El escaneo de
+  imagen se configura para bloquear HIGH/CRITICAL con corrección disponible;
+  los avisos sin parche upstream no bloquean el pipeline.
