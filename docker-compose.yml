@@ -1,7 +1,3 @@
-# ============================================================================
-#  docker-compose.yml  -  Starts the encryption service and Keycloak (IAM)
-#  CIB-204 Software Security - Universidad Cenfotec
-# ============================================================================
 services:
   cifrado:
     build: ./servidor
@@ -9,10 +5,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # The baseline keeps access control disabled.
-      - AUTH_ENABLED=${AUTH_ENABLED:-false}
-      - KEYCLOAK_URL=http://keycloak:8080
-      - KEYCLOAK_REALM=appmovil
+      AUTH_ENABLED: ${AUTH_ENABLED:-true}
+      KEYCLOAK_URL: ${KEYCLOAK_URL:-http://keycloak:8080}
+      KEYCLOAK_ISSUER: ${KEYCLOAK_ISSUER:-http://localhost:8080/realms/appmovil}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-appmovil}
+      KEYCLOAK_AUDIENCE: ${KEYCLOAK_AUDIENCE:-servicio-cifrado}
+      ORIGEN_PERMITIDO: ${ORIGEN_PERMITIDO:-http://localhost:8081}
+    depends_on:
+      - keycloak
     restart: unless-stopped
 
   keycloak:
@@ -20,15 +20,13 @@ services:
     container_name: keycloak
     command: start-dev
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-      # Codespaces provides the service name and forwarding domain.
-      - KC_HOSTNAME_URL=https://${CODESPACE_NAME}-8080.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
-      - KC_HOSTNAME_ADMIN_URL=https://${CODESPACE_NAME}-8080.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
-      - KC_HOSTNAME_STRICT=false
-      - KC_HTTP_ENABLED=true
-      # The github.dev proxy terminates TLS and forwards the original scheme.
-      - KC_PROXY_HEADERS=xforwarded
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?Define KEYCLOAK_ADMIN_PASSWORD in .env}
+      KC_HOSTNAME_URL: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8080}
+      KC_HOSTNAME_ADMIN_URL: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8080}
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
     ports:
       - "8080:8080"
     restart: unless-stopped

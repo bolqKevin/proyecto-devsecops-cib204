@@ -1,10 +1,10 @@
 // ============================================================================
-//  App.js  -  Expo / React Native mobile application (client)
-//  CIB-204 Software Security - Universidad Cenfotec
+//  App.js  -  Aplicacion movil (cliente) Expo / React Native
+//  CIB-204 Seguridad del Software - Universidad Cenfotec
 //
-//  The app is the CLIENT: it sends text to the Node.js encryption service and
-//  displays the encrypted and decrypted results. Encryption occurs in the
-//  service, not on the phone.
+//  La app es el CLIENTE: envia texto al servicio de cifrado (Node.js) y
+//  muestra el resultado cifrado y descifrado. El cifrado ocurre en el
+//  servicio, no en el telefono.
 // ============================================================================
 
 import React, { useState } from 'react';
@@ -70,7 +70,7 @@ export default function App() {
         <TextInput style={styles.input} value={urlServicio}
           onChangeText={setUrlServicio} autoCapitalize="none" />
 
-        <Text style={styles.label}>Token (opcional, si el IAM esta activo)</Text>
+        <Text style={styles.label}>Token JWT de Keycloak (requerido)</Text>
         <TextInput style={styles.input} value={token}
           onChangeText={setToken} autoCapitalize="none" placeholder="Bearer..." />
 

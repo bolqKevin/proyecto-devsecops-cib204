@@ -1,0 +1,34 @@
+REGISTRO DE VERIFICACION - FASE 2
+Proyecto: Proyecto DevSecOps CIB-204
+Fecha: 2026-11-01
+
+Pruebas automatizadas
+- Comando: npm test -- --runInBand
+- Resultado: 2 suites aprobadas, 9 pruebas aprobadas, 0 fallos.
+- Cobertura funcional: cifrado RSA, descifrado, API de salud, llave publica,
+  validacion de entradas, expresiones numericas seguras y validacion de hosts.
+
+Auditoria de dependencias
+- Comando: npm audit --audit-level=high
+- Codigo de salida: 0.
+- Resultado: sin vulnerabilidades de severidad alta o critica. El informe local
+  conserva avisos de severidad baja o moderada en herramientas de desarrollo.
+
+Sintaxis
+- Comando: node --check sobre auth.js, cifrado.js, cifrado.test.js, config.js,
+  db.js, integracion.test.js, prueba.js y servidor.js.
+- Resultado: todos los archivos reportaron syntax-ok.
+
+Autenticacion
+- Configuracion: AUTH_ENABLED=true.
+- Solicitud: POST /cifrar sin encabezado Authorization.
+- Resultado: HTTP 401 y cuerpo {"error":"No autorizado"}.
+
+Correcciones verificadas en codigo
+- Secretos retirados de servidor/config.js y trasladados a variables de entorno.
+- JWT validado con issuer, audience, JWKS y algoritmo RS256.
+- RSA actualizado a 2048 bits con OAEP-SHA256.
+- Validacion de texto, ciphertext, expresiones numericas y nombres de host.
+- SQL parametrizado y diagnostico ejecutado con execFile y argumentos separados.
+- Helmet, CORS restringido y limite de cuerpo JSON.
+- Imagen basada en node:20-slim con usuario appuser sin privilegios.

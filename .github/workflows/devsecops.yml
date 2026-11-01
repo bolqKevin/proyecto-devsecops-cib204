@@ -1,6 +1,6 @@
 name: Pipeline DevSecOps CIB-204
 
-# Runs on every push and pull request to main, and manually from Actions.
+# Se ejecuta en cada push y en cada pull request a main, y a mano desde Actions.
 on:
   push:
     branches: ["main", "inseguro", "solucion"]
@@ -8,13 +8,13 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-# Minimum permissions; the CodeQL job needs to write security events.
+# Permisos minimos; el job de CodeQL necesita escribir eventos de seguridad.
 permissions:
   contents: read
 
 jobs:
   # ==========================================================================
-  # 1) SAST with Semgrep -> detects eval(), SQL/command injection, JWT, and CORS
+  # 1) SAST con Semgrep  ->  detecta eval(), inyeccion SQL/comandos, JWT, CORS
   # ==========================================================================
   sast_semgrep:
     name: SAST - Semgrep
@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Ejecutar Semgrep
-        # --error fails the job when findings are present; the SARIF is saved.
+        # --error hace fallar el job si hay hallazgos; se guarda el SARIF.
         run: semgrep scan --config p/default --config p/javascript --config p/nodejs --error --sarif --output semgrep.sarif .
       - name: Guardar reporte Semgrep
         if: always()
@@ -34,7 +34,7 @@ jobs:
           path: semgrep.sarif
 
   # ==========================================================================
-  # 2) SAST with CodeQL -> GitHub's JavaScript analysis engine.
+  # 2) SAST con CodeQL -> motor de analisis de GitHub para JavaScript.
   # ==========================================================================
   sast_codeql:
     name: SAST - CodeQL
@@ -54,7 +54,7 @@ jobs:
         uses: github/codeql-action/analyze@v3
 
   # ==========================================================================
-  # 3) Secret detection with Gitleaks -> .env, private keys, AWS keys
+  # 3) Deteccion de secretos con Gitleaks  ->  .env, llave privada, claves AWS
   # ==========================================================================
   secretos:
     name: Secretos - Gitleaks
@@ -76,7 +76,7 @@ jobs:
           path: gitleaks.sarif
 
   # ==========================================================================
-  # 4) SCA - Dependency analysis -> npm audit + Trivy (filesystem)
+  # 4) SCA - Analisis de dependencias  ->  npm audit + Trivy (sistema de archivos)
   # ==========================================================================
   sca:
     name: SCA - Dependencias
@@ -86,11 +86,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Instalar dependencias reproducibles
+        working-directory: servidor
+        run: npm ci
       - name: npm audit (falla en severidad alta o critica)
         working-directory: servidor
-        run: |
-          npm install --package-lock-only
-          npm audit --audit-level=high
+        run: npm audit --audit-level=high
+      - name: Pruebas unitarias e integracion
+        working-directory: servidor
+        env:
+          AUTH_ENABLED: 'false'
+        run: npm test -- --runInBand
       - name: Trivy - dependencias (fs)
         uses: aquasecurity/trivy-action@master
         with:
@@ -101,7 +107,7 @@ jobs:
           format: table
 
   # ==========================================================================
-  # 5) Image security -> Trivy (image) + SBOM with Syft
+  # 5) Seguridad de la imagen  ->  Trivy (imagen) + SBOM con Syft
   # ==========================================================================
   imagen:
     name: Imagen - Trivy + SBOM
@@ -132,7 +138,7 @@ jobs:
           path: sbom.spdx.json
 
   # ==========================================================================
-  # 6) DAST - OWASP ZAP -> scans the running app (headers, CORS, etc.)
+  # 6) DAST - OWASP ZAP  ->  ataca la app en ejecucion (cabeceras, CORS, etc.)
   # ==========================================================================
   dast:
     name: DAST - OWASP ZAP

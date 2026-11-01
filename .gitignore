@@ -1,5 +1,14 @@
-# Dependencies
+# Dependencias
 node_modules/
 
-# The baseline keeps these files so secret scanning can register them;
-# the hardened configuration should ignore them.
+# Configuración y material sensible
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+clave_privada*
+
+# Salidas locales
+coverage/
+*.log

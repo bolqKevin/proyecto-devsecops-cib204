@@ -1,7 +1,8 @@
 const crypto = require('crypto');
 
-const TAMANO_LLAVE = 1024;
-const RELLENO = crypto.constants.RSA_PKCS1_PADDING;
+const TAMANO_LLAVE = 2048;
+const RELLENO = crypto.constants.RSA_PKCS1_OAEP_PADDING;
+const HASH_OAEP = 'sha256';
 
 function generarLlaves() {
   const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
@@ -15,7 +16,7 @@ function generarLlaves() {
 function cifrar(textoPlano, llavePublica) {
   const buffer = Buffer.from(String(textoPlano), 'utf8');
   const cifrado = crypto.publicEncrypt(
-    { key: llavePublica, padding: RELLENO },
+    { key: llavePublica, padding: RELLENO, oaepHash: HASH_OAEP },
     buffer
   );
   return cifrado.toString('base64');
@@ -24,7 +25,7 @@ function cifrar(textoPlano, llavePublica) {
 function descifrar(textoCifradoBase64, llavePrivada) {
   const buffer = Buffer.from(String(textoCifradoBase64), 'base64');
   const descifrado = crypto.privateDecrypt(
-    { key: llavePrivada, padding: RELLENO },
+    { key: llavePrivada, padding: RELLENO, oaepHash: HASH_OAEP },
     buffer
   );
   return descifrado.toString('utf8');
