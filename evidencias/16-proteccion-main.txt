@@ -1,0 +1,23 @@
+EVIDENCIA DE PROTECCION DE LA RAMA PRINCIPAL - FASE 2
+Proyecto: Proyecto DevSecOps CIB-204
+Fecha: 2026-11-01
+
+Configuracion verificada en GitHub:
+- Regla: main.
+- URL: https://github.com/bolqKevin/proyecto-devsecops-cib204/settings/branch_protection_rules/85665328
+- La regla aplica a 1 rama: main.
+- Se exige pull request antes de fusionar.
+- Se exige que la rama este actualizada antes de fusionar.
+- Se exige que pasen los siguientes checks de GitHub Actions:
+  - SAST - CodeQL
+  - SAST - Semgrep
+  - Secretos - Gitleaks
+  - SCA - Dependencias
+  - Imagen - Trivy + SBOM
+  - DAST - OWASP ZAP
+- La regla se aplica tambien a administradores.
+- Los force-pushes y las eliminaciones de la rama estan deshabilitados.
+
+Resultado observado: la configuracion quedo guardada y GitHub mostro la regla
+activa para main. La captura visual se tomo desde la pantalla de configuracion
+de GitHub indicada arriba.

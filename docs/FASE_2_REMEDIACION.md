@@ -31,6 +31,8 @@ imagen Docker y el pipeline de GitHub Actions.
   entrada invalida e intento de inyeccion.
 - `evidencias/15-app-fase2-auth.png`: operacion de la app con token valido,
   pendiente de ejecutar con la sesion demo de Keycloak.
+- `evidencias/16-proteccion-main.txt`: regla de proteccion de `main` con pull
+  request, rama actualizada y los seis checks de seguridad obligatorios.
 
 ## Criterio de cierre
 
